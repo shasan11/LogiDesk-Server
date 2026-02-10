@@ -307,7 +307,7 @@ class PaymentSummary(BranchScopedStampedOwnedActive):
     paid_costings = models.DecimalField(max_digits=12, decimal_places=2, default=0)
     profit_amount = models.DecimalField(max_digits=12, decimal_places=2, default=0)
 
-    currency = models.ForeignKey("accounting.Currency", on_delete=models.PROTECT, null=True, blank=True)
+    currency = models.ForeignKey("master.Currency", on_delete=models.PROTECT, null=True, blank=True)
     payment_status = models.CharField(max_length=50, choices=PAYMENT_CHOICES, default="prepaid")
 
     class Meta:
@@ -370,8 +370,8 @@ class ShipmentLineBase(BranchScopedStampedOwnedActive):
     remarks = models.TextField(blank=True, null=True)
     reference_no = models.CharField(max_length=100, blank=True, null=True)
 
-    charge_currency = models.ForeignKey("accounting.Currency", on_delete=models.PROTECT, related_name="+", null=True, blank=True)
-    invoice_currency = models.ForeignKey("accounting.Currency", on_delete=models.PROTECT, related_name="+", null=True, blank=True)
+    charge_currency = models.ForeignKey("master.Currency", on_delete=models.PROTECT, related_name="+", null=True, blank=True)
+    invoice_currency = models.ForeignKey("master.Currency", on_delete=models.PROTECT, related_name="+", null=True, blank=True)
     exchange_rate = models.DecimalField(max_digits=18, decimal_places=6, default=Decimal("1.000000"))
 
     unit_price_charge = models.DecimalField(max_digits=12, decimal_places=2, default=Decimal("0.00"))

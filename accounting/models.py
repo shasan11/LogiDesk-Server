@@ -7,8 +7,8 @@ from core.utils.coreModels import BranchScopedStampedOwnedActive, TransactionBas
 from master.models import Currency
 
 from accounting.observer.codeAssigner import assign_bank_account_code, assign_coa_code
-from observer.accountManager import sync_accounts_for_coa, sync_accounts_for_bank_account, sync_accounts_for_actor
-from observer.balanceUpdate import (
+from accounting.observer.accountManager import sync_accounts_for_coa, sync_accounts_for_bank_account, sync_accounts_for_actor
+from accounting.observer.balanceUpdate import (
     handle_cashtransfer_posting,
     handle_journalvoucher_posting,
     handle_chequeregister_posting,
