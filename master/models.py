@@ -121,6 +121,25 @@ def generate_branch_code():
     return f"{BRANCH_CODE_PREFIX}{n:08d}"
 
 
+BRANCH_CODE_PREFIX = "BRANCH-"
+BRANCH_CODE_RE = re.compile(rf"^{BRANCH_CODE_PREFIX}(\d+)$")
+
+
+def _next_branch_number():
+    last = Branch.objects.exclude(branch_id__isnull=True).exclude(branch_id__exact="").order_by("-created").first()
+    if not last or not last.branch_id:
+        return 300
+    m = BRANCH_CODE_RE.match(last.branch_id)
+    if not m:
+        return 300
+    return int(m.group(1)) + 1
+
+
+def generate_branch_code():
+    n = _next_branch_number()
+    return f"{BRANCH_CODE_PREFIX}{n:08d}"
+
+
 class Branch(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, db_index=True)
 
@@ -152,6 +171,9 @@ class Branch(models.Model):
         indexes = [models.Index(fields=['branch_id'], name='branch_id_idx'), models.Index(fields=['name'], name='branch_name_idx')]
 
 
+# ---------------------------
+# Master Data
+# ---------------------------
 # ---------------------------
 # Master Data
 # ---------------------------

@@ -105,7 +105,7 @@ def seed_initial_data() -> None:
             # Use env vars if provided; fallback is insecure but usable.
             su_email = os.getenv("APP_SUPERUSER_EMAIL", "admin@admin.com")
             su_username = os.getenv("APP_SUPERUSER_USERNAME", "admin")
-            su_password = os.getenv("APP_SUPERUSER_PASSWORD", "ChangeMe123!@#")  # CHANGE THIS in production
+            su_password = os.getenv("APP_SUPERUSER_PASSWORD", "Balkot11@")  # CHANGE THIS in production
 
             superuser = User.objects.filter(is_superuser=True).first()
             if not superuser:
@@ -187,7 +187,7 @@ class InitialSeederMiddleware:
     Runs seeding once (per process) on the first request.
     Safe with unique constraints + update_or_create.
     """
-
+    print("-------------Middle ware executed---------------------")
     def __init__(self, get_response):
         self.get_response = get_response
 
