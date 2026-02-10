@@ -67,7 +67,7 @@ class ChartofAccount(BranchScopedStampedOwnedActive):
     # ✅ FIX: must be CharField with choices
     account_type = models.CharField(max_length=20, choices=Category.choices, default=Category.ASSET, db_index=True)
 
-    account = models.ForeignKey(Accounts, on_delete=models.PROTECT, related_name="coa_nodes")
+    account = models.ForeignKey(Accounts, on_delete=models.PROTECT, related_name="coa_nodes",blank=True ,null=True)
     is_group = models.BooleanField(default=False)
     is_system = models.BooleanField(default=False)
 

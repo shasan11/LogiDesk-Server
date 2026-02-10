@@ -120,7 +120,7 @@ class Customer(BranchScopedStampedOwnedActive):
     account_no = models.CharField(max_length=100, blank=True, null=True)
     tax_ref_no = models.CharField(max_length=100, blank=True, null=True)
     created_for = models.ForeignKey("master.Branch", on_delete=models.PROTECT, blank=True, null=True, related_name="customers_created_for")
-    currency = models.ForeignKey("master.Currency", on_delete=models.PROTECT, related_name="customers_currency")
+    currency = models.ForeignKey("masterm.Currency", on_delete=models.PROTECT, related_name="customers_currency")
     credit_limit = models.DecimalField(max_digits=18, decimal_places=2, default=0, validators=[MinValueValidator(0)])
     days_limit = models.PositiveIntegerField(default=0)
     bank_info = models.TextField(blank=True, null=True)

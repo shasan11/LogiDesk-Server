@@ -1,4 +1,6 @@
+# accounting/filters.py
 import django_filters
+from django_filters import rest_framework as filters
 
 from accounting.models import (
     Accounts,
@@ -12,42 +14,58 @@ from accounting.models import (
     JournalVoucherItem,
 )
 
-
-class AccountsFilter(django_filters.FilterSet):
-    q = django_filters.CharFilter(method="filter_q")
+class AccountsFilter(filters.FilterSet):
+    q = filters.CharFilter(method="filter_q")
+    active = filters.BooleanFilter(field_name="active")
+    is_active = filters.BooleanFilter(field_name="active")  # alias
 
     def filter_q(self, qs, name, value):
         return qs.filter(name__icontains=value) | qs.filter(code__icontains=value)
 
     class Meta:
         model = Accounts
-        fields = ["branch", "account_class", "q"]
+        fields = ["branch", "account_class", "active", "is_active", "q"]
 
 
-class AccountingActorFilter(django_filters.FilterSet):
-    q = django_filters.CharFilter(method="filter_q")
+class AccountingActorFilter(filters.FilterSet):
+    q = filters.CharFilter(method="filter_q")
+    active = filters.BooleanFilter(field_name="active")
+    is_active = filters.BooleanFilter(field_name="active")
 
     def filter_q(self, qs, name, value):
         return qs.filter(name__icontains=value)
 
     class Meta:
         model = Actors
-        fields = ["branch", "q"]
+        fields = ["branch", "active", "is_active", "q"]
 
 
-class ChartofAccountFilter(django_filters.FilterSet):
-    q = django_filters.CharFilter(method="filter_q")
+class ChartofAccountFilter(filters.FilterSet):
+    q = filters.CharFilter(method="filter_q")
+    active = filters.BooleanFilter(field_name="active")
+    is_active = filters.BooleanFilter(field_name="active")
 
     def filter_q(self, qs, name, value):
         return qs.filter(name__icontains=value) | qs.filter(code__icontains=value)
 
     class Meta:
         model = ChartofAccount
-        fields = ["branch", "account_type", "is_group", "is_system", "parent", "q"]
+        fields = [
+            "branch",
+            "account_type",
+            "is_group",
+            "is_system",
+            "parent",
+            "active",
+            "is_active",
+            "q",
+        ]
 
 
-class BankAccountFilter(django_filters.FilterSet):
-    q = django_filters.CharFilter(method="filter_q")
+class BankAccountFilter(filters.FilterSet):
+    q = filters.CharFilter(method="filter_q")
+    active = filters.BooleanFilter(field_name="active")
+    is_active = filters.BooleanFilter(field_name="active")
 
     def filter_q(self, qs, name, value):
         return (
@@ -59,30 +77,34 @@ class BankAccountFilter(django_filters.FilterSet):
 
     class Meta:
         model = BankAccount
-        fields = ["branch", "type", "currency", "q"]
+        fields = ["branch", "type", "currency", "active", "is_active", "q"]
 
 
-class CashTransferFilter(django_filters.FilterSet):
-    q = django_filters.CharFilter(method="filter_q")
+class CashTransferFilter(filters.FilterSet):
+    q = filters.CharFilter(method="filter_q")
+    active = filters.BooleanFilter(field_name="active")
+    is_active = filters.BooleanFilter(field_name="active")
 
     def filter_q(self, qs, name, value):
         return qs.filter(transfer_no__icontains=value) | qs.filter(reference_no__icontains=value)
 
     class Meta:
         model = CashTransfer
-        fields = ["branch", "transfer_date", "from_account", "q"]
+        fields = ["branch", "transfer_date", "from_account", "active", "is_active", "q"]
 
 
-class CashTransferItemFilter(django_filters.FilterSet):
-    q = django_filters.CharFilter(field_name="note", lookup_expr="icontains")
+class CashTransferItemFilter(filters.FilterSet):
+    q = filters.CharFilter(field_name="note", lookup_expr="icontains")
 
     class Meta:
         model = CashTransferItem
         fields = ["cash_transfer", "to_account", "q"]
 
 
-class ChequeRegisterFilter(django_filters.FilterSet):
-    q = django_filters.CharFilter(method="filter_q")
+class ChequeRegisterFilter(filters.FilterSet):
+    q = filters.CharFilter(method="filter_q")
+    active = filters.BooleanFilter(field_name="active")
+    is_active = filters.BooleanFilter(field_name="active")
 
     def filter_q(self, qs, name, value):
         return qs.filter(cheque_no__icontains=value) | qs.filter(memo__icontains=value)
@@ -97,23 +119,27 @@ class ChequeRegisterFilter(django_filters.FilterSet):
             "bank_account",
             "coa_account",
             "contact",
+            "active",
+            "is_active",
             "q",
         ]
 
 
-class JournalVoucherFilter(django_filters.FilterSet):
-    q = django_filters.CharFilter(method="filter_q")
+class JournalVoucherFilter(filters.FilterSet):
+    q = filters.CharFilter(method="filter_q")
+    active = filters.BooleanFilter(field_name="active")
+    is_active = filters.BooleanFilter(field_name="active")
 
     def filter_q(self, qs, name, value):
         return qs.filter(voucher_no__icontains=value)
 
     class Meta:
         model = JournalVoucher
-        fields = ["branch", "voucher_date", "q"]
+        fields = ["branch", "voucher_date", "active", "is_active", "q"]
 
 
-class JournalVoucherItemFilter(django_filters.FilterSet):
-    q = django_filters.CharFilter(field_name="line_note", lookup_expr="icontains")
+class JournalVoucherItemFilter(filters.FilterSet):
+    q = filters.CharFilter(field_name="line_note", lookup_expr="icontains")
 
     class Meta:
         model = JournalVoucherItem
