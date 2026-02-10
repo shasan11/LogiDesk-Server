@@ -82,23 +82,25 @@ def seed_initial_data() -> None:
                 branch_name = os.getenv("APP_MAIN_BRANCH_NAME", "Main Branch")
                 branch_code = os.getenv("APP_MAIN_BRANCH_CODE", "KTM")
 
-                # Prefer existing branch with that code, else create
-                existing_by_code = Branch.objects.filter(code=branch_code).first()
-                if existing_by_code:
+                # Prefer existing branch with that branch_id, else create
+                existing_by_branch_id = Branch.objects.filter(branch_id=branch_code).first()
+                if existing_by_branch_id:
                     # Ensure no other main branch (shouldn't exist due constraint, but be safe)
                     Branch.objects.filter(is_main_branch=True).update(is_main_branch=False)
-                    existing_by_code.is_main_branch = True
-                    existing_by_code.name = existing_by_code.name or branch_name
-                    existing_by_code.save(update_fields=["is_main_branch", "name", "updated"])
-                    main_branch = existing_by_code
+                    existing_by_branch_id.is_main_branch = True
+                    existing_by_branch_id.name = existing_by_branch_id.name or branch_name
+                    existing_by_branch_id.save(update_fields=["is_main_branch", "name", "updated_at"])
+                    main_branch = existing_by_branch_id
                 else:
                     main_branch = Branch.objects.create(
+                        branch_id=branch_code,
                         name=branch_name,
-                        code=branch_code,
                         is_main_branch=True,
-                        phone=os.getenv("APP_MAIN_BRANCH_PHONE", ""),
-                        email=os.getenv("APP_MAIN_BRANCH_EMAIL", ""),
                         address=os.getenv("APP_MAIN_BRANCH_ADDRESS", ""),
+                        city=os.getenv("APP_MAIN_BRANCH_CITY", ""),
+                        state=os.getenv("APP_MAIN_BRANCH_STATE", ""),
+                        country=os.getenv("APP_MAIN_BRANCH_COUNTRY", ""),
+                        contact_number=os.getenv("APP_MAIN_BRANCH_PHONE", ""),
                     )
 
             # ------------------ 2) Superuser ------------------
@@ -130,10 +132,10 @@ def seed_initial_data() -> None:
                         superuser.branch = main_branch
                         superuser.save(update_fields=["branch"])
 
-            # Link branch.user_add if empty
-            if getattr(main_branch, "user_add_id", None) is None:
-                main_branch.user_add = superuser
-                main_branch.save(update_fields=["user_add", "updated"])
+            # Link branch.added_by if empty
+            if getattr(main_branch, "added_by_id", None) is None:
+                main_branch.added_by = superuser
+                main_branch.save(update_fields=["added_by", "updated_at"])
 
             # ------------------ 3) Currencies ------------------
             base_code = os.getenv("APP_BASE_CURRENCY", "NPR").upper().strip()
