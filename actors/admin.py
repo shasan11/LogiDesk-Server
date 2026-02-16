@@ -1,6 +1,8 @@
 # admin.py (actors app) - NO autocomplete_fields + no updated_at readonly
 
+from django.apps import apps
 from django.contrib import admin
+from django.contrib.admin.sites import AlreadyRegistered
 
 from .models import (
     BookingAgency,
@@ -276,3 +278,11 @@ class MainActorAdmin(BranchScopedAdminMixin):
 class SupplierAdmin(BranchScopedAdminMixin):
     list_display = ("id", "branch", "active", "created")
     search_fields = ("id",)
+
+# Register any remaining models from the actors app that do not have a custom admin.
+for model in apps.get_app_config("actors").get_models():
+    try:
+        admin.site.register(model)
+    except AlreadyRegistered:
+        pass
+
