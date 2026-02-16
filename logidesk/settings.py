@@ -14,6 +14,7 @@ ALLOWED_HOSTS = [h.strip() for h in os.getenv("DJANGO_ALLOWED_HOSTS", "*").split
 # Application definition
 
 INSTALLED_APPS = [
+    'unfold',
     'accounting',
     'actors',
     'core',
